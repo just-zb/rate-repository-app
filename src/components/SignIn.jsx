@@ -20,6 +20,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 12,
   },
+  inputError: {
+    borderColor: '#d73a4a',
+  },
   button: {
     backgroundColor: theme.colors.primary,
     paddingVertical: 12,
@@ -29,6 +32,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#ffffff',
   },
+  errorText: {
+    color: '#d73a4a',
+    marginBottom: 12,
+  },
 });
 
 const SignIn = () => {
@@ -37,6 +44,19 @@ const SignIn = () => {
       username: '',
       password: '',
     },
+    validate: (values) => {
+      const errors = {};
+
+      if (!values.username) {
+        errors.username = 'Username is required';
+      }
+
+      if (!values.password) {
+        errors.password = 'Password is required';
+      }
+
+      return errors;
+    },
     onSubmit: (values) => {
       console.log(values);
     },
@@ -44,21 +64,36 @@ const SignIn = () => {
 
   return (
     <View style={styles.container}>
-
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          formik.touched.username && formik.errors.username && styles.inputError,
+        ]}
         value={formik.values.username}
         onChangeText={formik.handleChange('username')}
+        onBlur={formik.handleBlur('username')}
         placeholder="Username"
       />
 
+      {formik.touched.username && formik.errors.username && (
+        <Text style={styles.errorText}>{formik.errors.username}</Text>
+      )}
+
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          formik.touched.password && formik.errors.password && styles.inputError,
+        ]}
         value={formik.values.password}
         onChangeText={formik.handleChange('password')}
+        onBlur={formik.handleBlur('password')}
         placeholder="Password"
         secureTextEntry
       />
+
+      {formik.touched.password && formik.errors.password && (
+        <Text style={styles.errorText}>{formik.errors.password}</Text>
+      )}
 
       <Pressable style={styles.button} onPress={formik.handleSubmit}>
         <Text style={styles.buttonText} fontWeight="bold">

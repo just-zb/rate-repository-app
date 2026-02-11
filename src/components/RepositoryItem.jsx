@@ -1,120 +1,116 @@
-import { View, Image, StyleSheet } from 'react-native';
-import Text from './Text';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import theme from '../theme';
+
+const formatCount = (num) => {
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'k';
+  }
+  return String(num);
+};
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.white,
+    padding: theme.spacing.large,
   },
+
   topRow: {
     flexDirection: 'row',
-    marginBottom: 15,
+    marginBottom: theme.spacing.medium,
   },
+
   avatar: {
-    width: 48,
-    height: 48,
+    width: theme.avatar.small,
+    height: theme.avatar.small,
     borderRadius: 4,
-    marginRight: 15,
+    marginRight: theme.spacing.large,
   },
+
   info: {
     flex: 1,
   },
+
   fullName: {
-    marginBottom: 4,
+    fontWeight: theme.fontWeights.bold,
+    fontSize: theme.fontSizes.subheading,
+    color: theme.colors.textPrimary,
+    marginBottom: theme.spacing.small,
   },
+
   description: {
-    marginBottom: 8,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.small,
   },
-  languageTag: {
+
+  language: {
     alignSelf: 'flex-start',
     backgroundColor: theme.colors.primary,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    color: theme.colors.white,
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.small,
     borderRadius: 4,
+    overflow: 'hidden',
+    fontSize: theme.fontSizes.small,
+    fontWeight: theme.fontWeights.bold,
   },
-  languageText: {
-    color: '#ffffff',
-  },
+
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    marginTop: theme.spacing.medium,
   },
+
   statItem: {
     alignItems: 'center',
   },
+
   statValue: {
-    marginBottom: 2,
+    fontWeight: theme.fontWeights.bold,
+    fontSize: theme.fontSizes.subheading,
+    color: theme.colors.textPrimary,
+  },
+
+  statLabel: {
+    color: theme.colors.textSecondary,
+    fontSize: theme.fontSizes.small,
   },
 });
 
-const formatCount = (value) => {
-  if (value < 1000) {
-    return value;
-  }
-
-  const formatted = (value / 1000).toFixed(1);
-  const trimmed = formatted.endsWith('.0') ? formatted.slice(0, -2) : formatted;
-
-  return `${trimmed}k`;
-};
-
-const RepositoryItem = ({ item }) => {
-  const {
-    ownerAvatarUrl,
-    fullName,
-    description,
-    language,
-    forksCount,
-    stargazersCount,
-    ratingAverage,
-    reviewCount,
-  } = item;
-
+const RepositoryItem = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
-        <Image source={{ uri: ownerAvatarUrl }} style={styles.avatar} />
+        <Image
+          source={{ uri: props.imageUrl }}
+          style={styles.avatar}
+        />
 
         <View style={styles.info}>
-          <Text fontWeight="bold" fontSize="subheading" style={styles.fullName}>
-            {fullName}
-          </Text>
-          <Text color="textSecondary" style={styles.description}>
-            {description}
-          </Text>
-          {language && (
-            <View style={styles.languageTag}>
-              <Text style={styles.languageText}>{language}</Text>
-            </View>
-          )}
+          <Text style={styles.fullName}>{props.fullName}</Text>
+          <Text style={styles.description}>{props.description}</Text>
+          <Text style={styles.language}>{props.language}</Text>
         </View>
       </View>
 
       <View style={styles.statsRow}>
         <View style={styles.statItem}>
-          <Text fontWeight="bold" style={styles.statValue}>
-            {formatCount(stargazersCount)}
-          </Text>
-          <Text color="textSecondary">Stars</Text>
+          <Text style={styles.statValue}>{formatCount(props.stargazersCount)}</Text>
+          <Text style={styles.statLabel}>Stars</Text>
         </View>
+
         <View style={styles.statItem}>
-          <Text fontWeight="bold" style={styles.statValue}>
-            {formatCount(forksCount)}
-          </Text>
-          <Text color="textSecondary">Forks</Text>
+          <Text style={styles.statValue}>{formatCount(props.forksCount)}</Text>
+          <Text style={styles.statLabel}>Forks</Text>
         </View>
+
         <View style={styles.statItem}>
-          <Text fontWeight="bold" style={styles.statValue}>
-            {formatCount(reviewCount)}
-          </Text>
-          <Text color="textSecondary">Reviews</Text>
+          <Text style={styles.statValue}>{props.reviewCount}</Text>
+          <Text style={styles.statLabel}>Reviews</Text>
         </View>
+
         <View style={styles.statItem}>
-          <Text fontWeight="bold" style={styles.statValue}>
-            {formatCount(ratingAverage)}
-          </Text>
-          <Text color="textSecondary">Rating</Text>
+          <Text style={styles.statValue}>{props.ratingAverage}</Text>
+          <Text style={styles.statLabel}>Rating</Text>
         </View>
       </View>
     </View>

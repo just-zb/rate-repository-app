@@ -1,6 +1,5 @@
 import { useQuery, gql } from '@apollo/client';
 
-// Only the fields needed for RepositoryItem
 const GET_REPOSITORIES = gql`
   query GetRepositories {
     repositories {
@@ -21,14 +20,22 @@ const GET_REPOSITORIES = gql`
   }
 `;
 
-const useRepositories = () => {
-  const { data, loading, refetch } = useQuery(GET_REPOSITORIES, {
+const useRepositories = ({ orderBy, orderDirection, searchKeyword } = {}) => {
+  const variables = {
+    orderBy: orderBy ?? 'CREATED_AT',
+    orderDirection: orderDirection ?? 'DESC',
+    searchKeyword: searchKeyword ?? '',
+  };
+
+  const { data, loading, fetchMore, refetch } = useQuery(GET_REPOSITORIES, {
+    variables,
     fetchPolicy: 'cache-and-network',
   });
 
   return {
-    repositories: data ? data.repositories : { edges: [] },
+    repositories: data?.repositories,
     loading,
+    fetchMore,
     refetch,
   };
 };

@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 
 const RepositoryItem = (props) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="repositoryItem">
       <View style={styles.topRow}>
         <Image
           source={{ uri: props.imageUrl }}
@@ -116,5 +116,6 @@ const RepositoryItem = (props) => {
     </View>
   );
 };
+
 
 export default RepositoryItem;
